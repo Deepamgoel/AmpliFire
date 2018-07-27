@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">AmpliFire</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="artist">Artist</string>
+    <string name="album">Album</string>
+    <string name="songs">Songs</string>
+    <string name="playlist">Playlist</string>
+
+    <string name="album_art">album Art</string>
+    <string name="repeat">repeat</string>
+    <string name="previous">previous</string>
+    <string name="play">play</string>
+    <string name="next">next</string>
+    <string name="shuffle">shuffle</string>
+    <string name="background">background</string>
+    <string name="duration">%d:%d</string>
+    <string name="back">back</string>
+    <string name="unknown_album">Unknown Album</string>
+    <string name="unknown_artist">Unknown Artist</string>
+</resources>
