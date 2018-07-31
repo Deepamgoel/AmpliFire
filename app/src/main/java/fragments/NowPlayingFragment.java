@@ -68,12 +68,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     private Runnable UpdateSongTime = new Runnable() {
 
         public void run() {
-            int position = mediaPlayer.getCurrentPosition();
+            int time = mediaPlayer.getCurrentPosition();
             playedDuration.setText(getString(R.string.duration,
-                    TimeUnit.MILLISECONDS.toMinutes(position),
-                    (TimeUnit.MILLISECONDS.toSeconds(position) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(position)))));
-
+                    TimeUnit.MILLISECONDS.toMinutes(time),
+                    (TimeUnit.MILLISECONDS.toSeconds(time) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
             handler.postDelayed(this, 100);
         }
@@ -92,7 +91,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         super.onActivityCreated(savedInstanceState);
 
         int id = getResources().getIdentifier(getResources().getResourceName(
-                R.raw.hymn_for_the_weekend),
+                R.raw.heartless),
                 "raw",
                 getActivity().getPackageName());
 
@@ -106,11 +105,12 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             background.setImageBitmap(image);
             albumArt.setImageBitmap(image);
         } catch (Exception e) {
+            background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
             albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
         }
 
         try {
-//            Todo
+//                Todo: Reconsider following logic
 //            title.setText(getResources().getResourceName(R.raw.party_hard_chris_brown));
             title.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
         } catch (Exception e) {
@@ -160,7 +160,6 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                     play.setTag("play");
                     play.setImageDrawable(getResources().getDrawable(R.drawable.pause_circle_outline));
 
-
                     mediaPlayer.start();
                     seekBar.setMax(mediaPlayer.getDuration());
 
@@ -175,15 +174,15 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 }
                 break;
 
-//                Todo
+//                Todo: Update next button
             case R.id.next:
                 break;
 
-//                Todo
+//                Todo: Update previous button
             case R.id.previous:
                 break;
 
-//                Todo
+//                Todo: Update like button
             case R.id.like:
                 if (like.getTag().equals("off")) {
                     like.setTag("on");
@@ -196,7 +195,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 }
                 break;
 
-//                Todo
+//                Todo: Update repeat button
             case R.id.repeat:
                 if (repeat.getTag().equals("off")) {
                     repeat.setTag("on");
@@ -214,11 +213,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 }
                 break;
 
-//                Todo
+//                Todo: Update info button
             case R.id.song_info:
                 break;
 
-//                Todo
+//                Todo: Update back button
             case R.id.back:
                 break;
         }

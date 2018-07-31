@@ -1,4 +1,4 @@
-package com.example.deepamgoel.amplifire;
+package utils;
 
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
@@ -19,7 +19,7 @@ public class SongMetaData {
         return mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
     }
 
-    byte[] getArt(){
+    byte[] getArt() {
         return mmr.getEmbeddedPicture();
     }
 }

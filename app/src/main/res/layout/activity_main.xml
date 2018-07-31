@@ -11,26 +11,41 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <fragment
-            android:id="@+id/fragment"
-            android:name="fragments.NowPlayingFragment"
+        <FrameLayout
+            android:id="@+id/frame_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/bnv" />
+            android:layout_above="@id/bnv"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bnv"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="?android:windowBackground"
-            android:foreground="?selectableItemBackground"
-            app:itemBackground="@android:color/white"
-            app:itemIconTint="@android:color/black"
-            app:itemTextColor="@android:color/black"
+            android:background="@drawable/gradient"
+            app:elevation="4dp"
+            app:itemBackground="@color/AliceBlue"
+            app:itemIconTint="@color/colorPrimaryDark"
+            app:itemTextColor="@color/colorPrimaryDark"
             app:menu="@menu/navigation">
 
         </android.support.design.widget.BottomNavigationView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            android:tint="@color/colorPrimaryDark"
+            android:src="@drawable/play_circle_outline"
+            app:backgroundTint="@color/AliceBlue"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
+            app:fabSize="normal"
+            app:useCompatPadding="true" />
 
     </RelativeLayout>
 

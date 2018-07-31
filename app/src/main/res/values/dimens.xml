@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="eight_dp">8dp</dimen>
     <dimen name="sixteen_sp">16sp</dimen>
     <dimen name="sixteen_dp">16dp</dimen>
@@ -13,4 +13,7 @@
     <dimen name="seventy_two_dp">72dp</dimen>
     <dimen name="ninety_six_dp">96dp</dimen>
     <dimen name="two_hundred_dp">200dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">56dp</dimen>
 </resources>

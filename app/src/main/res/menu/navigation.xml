@@ -2,28 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_song"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:id="@+id/navigation_songs"
+        android:icon="@drawable/library_music"
         android:title="@string/songs" />
 
     <item
-        android:id="@+id/navigation_album"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="@string/album" />
+        android:title="" />
 
     <item
-        android:id="@+id/navigation_now_playing"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="@string/now_playing" />
+        android:id="@+id/navigation_playlist"
+        android:icon="@drawable/playlist_play"
+        android:title="@string/playlist" />
 
-    <!--<item-->
-        <!--android:id="@+id/navigation_artist"-->
-        <!--android:icon="@drawable/ic_launcher_foreground"-->
-        <!--android:title="@string/artist" />-->
-
-    <!--<item-->
-        <!--android:id="@+id/navigation_playlist"-->
-        <!--android:icon="@drawable/ic_launcher_foreground"-->
-        <!--android:title="@string/playlist" />-->
 
 </menu>

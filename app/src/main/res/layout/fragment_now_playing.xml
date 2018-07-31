@@ -26,7 +26,7 @@
             android:layout_marginStart="@dimen/eight_dp"
             android:background="@null"
             android:contentDescription="@string/back"
-            android:src="@drawable/arrow_left"
+            android:src="@drawable/arrow_down"
             android:tint="@color/AliceBlue" />
 
         <ImageButton
@@ -163,7 +163,7 @@
             android:layout_marginStart="@dimen/sixteen_dp"
             android:background="@null"
             android:contentDescription="@string/previous"
-            android:src="@drawable/skip_previous_circle_outline"
+            android:src="@drawable/skip_previous"
             android:tint="@color/AliceBlue" />
 
         <ImageButton
@@ -185,7 +185,7 @@
             android:layout_marginRight="@dimen/sixteen_dp"
             android:background="@null"
             android:contentDescription="@string/next"
-            android:src="@drawable/skip_next_circle_outline"
+            android:src="@drawable/skip_next"
             android:tint="@color/AliceBlue" />
 
         <ImageButton
