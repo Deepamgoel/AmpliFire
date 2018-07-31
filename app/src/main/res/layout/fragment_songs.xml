@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/twenty_four_dp"
+    android:fitsSystemWindows="true"
     tools:context="fragments.SongsFragment">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="@string/app_name" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <ListView
-        android:id="@+id/list_view"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_songs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/DarkTeal"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs_songs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/DarkTeal"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/Teal"
+            app:tabMode="fixed" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_songs_fragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

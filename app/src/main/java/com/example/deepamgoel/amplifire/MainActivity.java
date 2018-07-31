@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
         loadFragment(new SongsFragment());
         BottomNavigationView bottomNavigationView = findViewById(R.id.bnv);
+
+        loadFragment(new SongsFragment());
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override

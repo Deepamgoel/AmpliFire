@@ -25,10 +25,10 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/gradient"
             app:elevation="4dp"
-            app:itemBackground="@color/AliceBlue"
-            app:itemIconTint="@color/colorPrimaryDark"
-            app:itemTextColor="@color/colorPrimaryDark"
-            app:menu="@menu/navigation">
+            app:itemBackground="@color/DarkTeal"
+            app:itemIconTint="@color/bnv_color"
+            app:itemTextColor="@color/bnv_color"
+            app:menu="@menu/bnv_menu">
 
         </android.support.design.widget.BottomNavigationView>
 
@@ -39,9 +39,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:scaleType="fitXY"
-            android:tint="@color/colorPrimaryDark"
-            android:src="@drawable/play_circle_outline"
-            app:backgroundTint="@color/AliceBlue"
+            android:tint="@android:color/white"
+            app:backgroundTint="@color/DarkTeal"
             app:borderWidth="0dp"
             app:elevation="4dp"
             app:fabSize="normal"
