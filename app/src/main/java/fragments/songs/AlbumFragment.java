@@ -1,5 +1,4 @@
-package fragments;
-
+package fragments.songs;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,16 +10,17 @@ import android.view.ViewGroup;
 
 import com.example.deepamgoel.amplifire.R;
 
-public class SongsListFragment extends Fragment {
+public class AlbumFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_songs_list, container, false);
+        return inflater.inflate(R.layout.fragment_album, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
 }

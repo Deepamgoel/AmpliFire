@@ -1,4 +1,4 @@
-package fragments;
+package fragments.bnv;
 
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;

@@ -1,4 +1,4 @@
-package fragments;
+package fragments.bnv;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +15,9 @@ import com.example.deepamgoel.amplifire.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fragments.songs.AlbumFragment;
+import fragments.songs.ArtistFragment;
+import fragments.songs.SongsListFragment;
 import utils.ViewPagerAdapter;
 
 public class SongsFragment extends Fragment {

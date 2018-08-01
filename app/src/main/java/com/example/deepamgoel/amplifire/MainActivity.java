@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import fragments.PlaylistFragment;
-import fragments.SongsFragment;
+import fragments.bnv.PlaylistFragment;
+import fragments.bnv.SongsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
