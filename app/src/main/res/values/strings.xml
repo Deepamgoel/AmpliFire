@@ -15,8 +15,9 @@
     <string name="background">background</string>
     <string name="duration">%d:%d</string>
     <string name="back">back</string>
-    <string name="unknown_album">Unknown Album</string>
+    <string name="unknown_title">Unknown Title</string>
     <string name="unknown_artist">Unknown Artist</string>
+    <string name="unknown_album">Unknown Album</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

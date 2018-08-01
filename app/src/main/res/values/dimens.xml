@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="four_dp">4dp</dimen>
+    <dimen name="eight_sp">8sp</dimen>
     <dimen name="eight_dp">8dp</dimen>
     <dimen name="sixteen_sp">16sp</dimen>
     <dimen name="sixteen_dp">16dp</dimen>
+    <dimen name="eighteen_sp">18sp</dimen>
     <dimen name="twenty_four_sp">24sp</dimen>
     <dimen name="twenty_four_dp">24dp</dimen>
+    <dimen name="thirty_six_sp">36sp</dimen>
     <dimen name="thirty_six_dp">36dp</dimen>
     <dimen name="forty_dp">40dp</dimen>
     <dimen name="forty_eight_dp">48dp</dimen>
