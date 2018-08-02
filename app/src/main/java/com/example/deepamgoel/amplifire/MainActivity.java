@@ -8,17 +8,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fragments.NowPlayingFragment;
 import fragments.PlaylistFragment;
 import fragments.SongsFragment;
 import fragments.SongsListFragment;
-import utils.ListItemSongs;
 
 public class MainActivity extends AppCompatActivity implements SongsListFragment.Communicator {
 
@@ -34,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements SongsListFragment
         ButterKnife.bind(this);
 
         loadFragment(new SongsFragment());
-        Log.d("TAG", "SongsFragment loaded");
         bnv.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -73,11 +69,9 @@ public class MainActivity extends AppCompatActivity implements SongsListFragment
     }
 
     @Override
-    public void respond(ListItemSongs song) {
-        NowPlayingActivity activity = new NowPlayingActivity();
-        NowPlayingFragment fragment =
-                (NowPlayingFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_now_playing);
-        Log.d("Fragment", String.valueOf(fragment));
-//        fragment.changeData(song);
+    public void respond(int id) {
+        Intent intent = new Intent(this, NowPlayingActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 }

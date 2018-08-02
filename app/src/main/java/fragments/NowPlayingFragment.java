@@ -1,5 +1,6 @@
 package fragments;
 
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -9,7 +10,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +24,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.ListItemSongs;
-
-import static android.content.ContentValues.TAG;
 
 public class NowPlayingFragment extends Fragment implements View.OnClickListener {
 
 
-    // Song attributes
+    // Media attributes
     @BindView(R.id.background)
     ImageView background;
     @BindView(R.id.album_art)
@@ -66,6 +63,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private MediaMetadataRetriever metadataRetriever;
     private MediaPlayer mediaPlayer;
+    private AssetFileDescriptor afd;
+    private View view;
 
     private Handler handler = new Handler();
     private Runnable UpdateSongTime = new Runnable() {
@@ -85,7 +84,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_now_playing, container, false);
+        view = inflater.inflate(R.layout.fragment_now_playing, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -93,61 +92,14 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("TAG", "NowPlayingFragment loaded");
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.animals);
+        metadataRetriever = new MediaMetadataRetriever();
 
-        try {
-            byte[] art = metadataRetriever.getEmbeddedPicture();
-            Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
-            background.setImageBitmap(image);
-            albumArt.setImageBitmap(image);
-        } catch (Exception e) {
-            background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
-            albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
-        }
+        afd = view.getResources().openRawResourceFd(R.raw.animals);
+        metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 
-        try {
-            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-            if (string != null)
-                title.setText(string);
-            else title.setText(R.string.unknown_title);
-        } catch (Exception e) {
-            title.setText(R.string.unknown_title);
-        }
-
-        try {
-            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            if (string != null)
-                artist.setText(string);
-            else artist.setText(R.string.unknown_artist);
-        } catch (Exception e) {
-            artist.setText(R.string.unknown_artist);
-        }
-
-        try {
-            int time = mediaPlayer.getDuration();
-            totalDuration.setText(getString(R.string.duration,
-                    TimeUnit.MILLISECONDS.toMinutes(time),
-                    (TimeUnit.MILLISECONDS.toSeconds(time) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
-        } catch (Exception e) {
-            totalDuration.setText(getString(R.string.duration, 0, 0));
-        }
-
-        try {
-            int time = mediaPlayer.getCurrentPosition();
-            playedDuration.setText(getString(R.string.duration,
-                    TimeUnit.MILLISECONDS.toMinutes(time),
-                    (TimeUnit.MILLISECONDS.toSeconds(time) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
-        } catch (Exception e) {
-            totalDuration.setText(getString(R.string.duration, 0, 0));
-        }
-
+        setData();
         play.setOnClickListener(this);
         next.setOnClickListener(this);
         previous.setOnClickListener(this);
@@ -225,6 +177,57 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    private void setData() {
+
+        try {
+            byte[] art = metadataRetriever.getEmbeddedPicture();
+            Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
+            background.setImageBitmap(image);
+            albumArt.setImageBitmap(image);
+        } catch (Exception e) {
+            background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
+            albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
+        }
+
+        try {
+            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+            if (string != null)
+                title.setText(string);
+            else title.setText(R.string.unknown_title);
+        } catch (Exception e) {
+            title.setText(R.string.unknown_title);
+        }
+
+        try {
+            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            if (string != null)
+                artist.setText(string);
+            else artist.setText(R.string.unknown_artist);
+        } catch (Exception e) {
+            artist.setText(R.string.unknown_artist);
+        }
+
+        try {
+            int time = mediaPlayer.getDuration();
+            totalDuration.setText(getString(R.string.duration,
+                    TimeUnit.MILLISECONDS.toMinutes(time),
+                    (TimeUnit.MILLISECONDS.toSeconds(time) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
+        } catch (Exception e) {
+            totalDuration.setText(getString(R.string.duration, 0, 0));
+        }
+
+        try {
+            int time = mediaPlayer.getCurrentPosition();
+            playedDuration.setText(getString(R.string.duration,
+                    TimeUnit.MILLISECONDS.toMinutes(time),
+                    (TimeUnit.MILLISECONDS.toSeconds(time) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
+        } catch (Exception e) {
+            totalDuration.setText(getString(R.string.duration, 0, 0));
+        }
+    }
+
     private void play() {
         play.setTag("play");
         play.setImageDrawable(getResources().getDrawable(R.drawable.pause_circle_outline));
@@ -279,11 +282,12 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         repeat.setColorFilter(getResources().getColor(R.color.Teal));
     }
 
-    public void changeData(ListItemSongs song) {
-        Log.d(TAG, String.valueOf(song.getMetadataRetriever().extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)));
-//        mediaPlayer = song.getMediaPlayer();
-//        metadataRetriever = song.getMetadataRetriever();
-//        play();
+    public void changeData(int id) {
+        mediaPlayer = MediaPlayer.create(getContext(), id);
+        afd = view.getResources().openRawResourceFd(id);
+        metadataRetriever = new MediaMetadataRetriever();
+        metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+        setData();
     }
 }
 

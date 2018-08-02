@@ -1,5 +1,7 @@
 package com.example.deepamgoel.amplifire;
 
+import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaMetadataRetriever;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,14 +14,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import fragments.SongsListFragment;
-import utils.ListItemSongs;
+import utils.Media;
 
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.ViewHolder> {
 
-    private List<ListItemSongs> list;
+    private Context context;
+    private List<Media> list;
     private SongsListFragment.Communicator communicator;
 
-    public SongsListAdapter(List<ListItemSongs> list, SongsListFragment.Communicator communicator) {
+    public SongsListAdapter(Context context, List<Media> list, SongsListFragment.Communicator communicator) {
+        this.context = context;
         this.list = list;
         this.communicator = communicator;
     }
@@ -33,8 +37,8 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ListItemSongs song = list.get(viewHolder.getAdapterPosition());
-                communicator.respond(song);
+                Media media = list.get(viewHolder.getAdapterPosition());
+                communicator.respond(media.getId());
             }
         });
         return viewHolder;
@@ -42,8 +46,11 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ListItemSongs song = list.get(position);
-        MediaMetadataRetriever metadataRetriever = song.getMetadataRetriever();
+        Media media = list.get(position);
+
+        AssetFileDescriptor afd = context.getResources().openRawResourceFd(media.getId());
+        MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+        metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 
         String title = metadataRetriever.extractMetadata(
                 MediaMetadataRetriever.METADATA_KEY_TITLE);

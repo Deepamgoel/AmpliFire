@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +19,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.ListItemSongs;
+import utils.Media;
 
 public class SongsListFragment extends Fragment {
 
     @BindView(R.id.recycler_view_songs_list)
     RecyclerView recyclerView;
 
-    List<ListItemSongs> list;
+    List<Media> list;
     Communicator communicator;
     View view;
 
@@ -35,7 +34,6 @@ public class SongsListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Communicator) {
-            Log.d("TAG", "Communicator linked");
             communicator = (Communicator) context;
         } else {
             throw new RuntimeException(getContext().toString()
@@ -59,68 +57,68 @@ public class SongsListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                 LinearLayoutManager.VERTICAL, false));
         addData();
-        recyclerView.setAdapter(new SongsListAdapter(list, communicator));
+        recyclerView.setAdapter(new SongsListAdapter(view.getContext(), list, communicator));
     }
 
     private void addData() {
-        ListItemSongs item;
+        Media item;
 
-        item = new ListItemSongs(view.getContext(), R.raw.animals);
+        item = new Media(view.getContext(), R.raw.animals);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.better);
+        item = new Media(view.getContext(), R.raw.better);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.burn);
+        item = new Media(view.getContext(), R.raw.burn);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.cant_stop_the_feeling);
+        item = new Media(view.getContext(), R.raw.cant_stop_the_feeling);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.champagne_problems);
+        item = new Media(view.getContext(), R.raw.champagne_problems);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.dna);
+        item = new Media(view.getContext(), R.raw.dna);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.forgiveness);
+        item = new Media(view.getContext(), R.raw.forgiveness);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.heartless);
+        item = new Media(view.getContext(), R.raw.heartless);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.human);
+        item = new Media(view.getContext(), R.raw.human);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.hymn_for_the_weekend);
+        item = new Media(view.getContext(), R.raw.hymn_for_the_weekend);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.im_not_theonly_one);
+        item = new Media(view.getContext(), R.raw.im_not_theonly_one);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.love_yourself);
+        item = new Media(view.getContext(), R.raw.love_yourself);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.move_your_body);
+        item = new Media(view.getContext(), R.raw.move_your_body);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.party_hard_chris_brown);
+        item = new Media(view.getContext(), R.raw.party_hard_chris_brown);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.starboy);
+        item = new Media(view.getContext(), R.raw.starboy);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.when_the_bassline_drops);
+        item = new Media(view.getContext(), R.raw.when_the_bassline_drops);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.years_seven);
+        item = new Media(view.getContext(), R.raw.years_seven);
         list.add(item);
 
-        item = new ListItemSongs(view.getContext(), R.raw.yellow);
+        item = new Media(view.getContext(), R.raw.yellow);
         list.add(item);
     }
 
     public interface Communicator {
-        void respond(ListItemSongs song);
+        void respond(int id);
     }
 }
