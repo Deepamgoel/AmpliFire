@@ -1,6 +1,5 @@
-package fragments.bnv;
+package fragments;
 
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -10,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +24,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.ListItemSongs;
 
-public class NowPlayingFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+import static android.content.ContentValues.TAG;
+
+public class NowPlayingFragment extends Fragment implements View.OnClickListener {
 
 
     // Song attributes
@@ -61,7 +64,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     @BindView(R.id.like)
     ImageButton like;
 
-    private MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+    private MediaMetadataRetriever metadataRetriever;
     private MediaPlayer mediaPlayer;
 
     private Handler handler = new Handler();
@@ -88,17 +91,14 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("TAG", "NowPlayingFragment loaded");
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        int id = getResources().getIdentifier(getResources().getResourceName(
-                R.raw.heartless),
-                "raw",
-                getActivity().getPackageName());
-
-        mediaPlayer = MediaPlayer.create(getActivity(), id);
-        AssetFileDescriptor afd = getResources().openRawResourceFd(id);
-        metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 
         try {
             byte[] art = metadataRetriever.getEmbeddedPicture();
@@ -111,15 +111,19 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         }
 
         try {
-//                Todo: Reconsider following logic
-//            title.setText(getResources().getResourceName(R.raw.party_hard_chris_brown));
-            title.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+            if (string != null)
+                title.setText(string);
+            else title.setText(R.string.unknown_title);
         } catch (Exception e) {
-            title.setText(R.string.unknown_album);
+            title.setText(R.string.unknown_title);
         }
 
         try {
-            artist.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            if (string != null)
+                artist.setText(string);
+            else artist.setText(R.string.unknown_artist);
         } catch (Exception e) {
             artist.setText(R.string.unknown_artist);
         }
@@ -146,10 +150,31 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
         play.setOnClickListener(this);
         next.setOnClickListener(this);
+        previous.setOnClickListener(this);
         repeat.setOnClickListener(this);
         like.setOnClickListener(this);
-        previous.setOnClickListener(this);
-        seekBar.setOnSeekBarChangeListener(this);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mediaPlayer != null && fromUser) {
+                    mediaPlayer.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+//        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                pause();
+//            }
+//        });
     }
 
     @Override
@@ -158,59 +183,35 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
             case R.id.play:
                 if (play.getTag().equals("pause")) {
-                    play.setTag("play");
-                    play.setImageDrawable(getResources().getDrawable(R.drawable.pause_circle_outline));
-
-                    mediaPlayer.start();
-                    seekBar.setMax(mediaPlayer.getDuration());
-
-                    seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                    handler.postDelayed(UpdateSongTime, 100);
-
+                    play();
                 } else if (play.getTag().equals("play")) {
-                    play.setTag("pause");
-                    play.setImageDrawable(getResources().getDrawable(R.drawable.play_circle_outline));
-
-                    mediaPlayer.pause();
+                    pause();
                 }
                 break;
 
-//                Todo: Update next button
             case R.id.next:
+                next();
                 break;
 
-//                Todo: Update previous button
             case R.id.previous:
+                previous();
                 break;
 
-//                Todo: Update like button
             case R.id.like:
                 if (like.getTag().equals("off")) {
-                    like.setTag("on");
-                    like.setImageDrawable(getResources().getDrawable(R.drawable.heart));
-                    like.setColorFilter(getResources().getColor(R.color.Teal));
+                    like();
                 } else if (like.getTag().equals("on")) {
-                    like.setTag("off");
-                    like.setImageDrawable(getResources().getDrawable(R.drawable.heart_outline));
-                    like.setColorFilter(getResources().getColor(R.color.AliceBlue));
+                    dislike();
                 }
                 break;
 
-//                Todo: Update repeat button
             case R.id.repeat:
                 if (repeat.getTag().equals("off")) {
-                    repeat.setTag("on");
-                    repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat));
-                    repeat.setColorFilter(getResources().getColor(R.color.Teal));
+                    repeatOn();
                 } else if (repeat.getTag().equals("on")) {
-                    repeat.setTag("one");
-                    repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat_once));
-                    repeat.setColorFilter(getResources().getColor(R.color.Teal));
-
+                    repeatOnce();
                 } else if (repeat.getTag().equals("one")) {
-                    repeat.setTag("off");
-                    repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat));
-                    repeat.setColorFilter(getResources().getColor(R.color.AliceBlue));
+                    repeatOff();
                 }
                 break;
 
@@ -224,19 +225,65 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (mediaPlayer != null && fromUser) {
-            mediaPlayer.seekTo(progress);
-        }
+    private void play() {
+        play.setTag("play");
+        play.setImageDrawable(getResources().getDrawable(R.drawable.pause_circle_outline));
+
+        mediaPlayer.start();
+        seekBar.setMax(mediaPlayer.getDuration());
+        seekBar.setProgress(mediaPlayer.getCurrentPosition());
+        handler.postDelayed(UpdateSongTime, 100);
     }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
+    private void pause() {
+        play.setTag("pause");
+        play.setImageDrawable(getResources().getDrawable(R.drawable.play_circle_outline));
+        mediaPlayer.pause();
     }
 
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
+    private void next() {
+
+    }
+
+    private void previous() {
+
+    }
+
+    private void like() {
+        like.setTag("on");
+        like.setImageDrawable(getResources().getDrawable(R.drawable.heart));
+        like.setColorFilter(getResources().getColor(R.color.Teal));
+    }
+
+    private void dislike() {
+        like.setTag("off");
+        like.setImageDrawable(getResources().getDrawable(R.drawable.heart_outline));
+        like.setColorFilter(getResources().getColor(R.color.AliceBlue));
+    }
+
+    private void repeatOn() {
+        repeat.setTag("on");
+        repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat));
+        repeat.setColorFilter(getResources().getColor(R.color.Teal));
+    }
+
+    private void repeatOff() {
+        repeat.setTag("off");
+        repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat));
+        repeat.setColorFilter(getResources().getColor(R.color.AliceBlue));
+    }
+
+    private void repeatOnce() {
+        repeat.setTag("one");
+        repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat_once));
+        repeat.setColorFilter(getResources().getColor(R.color.Teal));
+    }
+
+    public void changeData(ListItemSongs song) {
+        Log.d(TAG, String.valueOf(song.getMetadataRetriever().extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)));
+//        mediaPlayer = song.getMediaPlayer();
+//        metadataRetriever = song.getMetadataRetriever();
+//        play();
     }
 }
 

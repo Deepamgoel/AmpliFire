@@ -8,24 +8,34 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import fragments.bnv.PlaylistFragment;
-import fragments.bnv.SongsFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import fragments.NowPlayingFragment;
+import fragments.PlaylistFragment;
+import fragments.SongsFragment;
+import fragments.SongsListFragment;
+import utils.ListItemSongs;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SongsListFragment.Communicator {
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.bnv)
+    BottomNavigationView bnv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         loadFragment(new SongsFragment());
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bnv);
-
-        loadFragment(new SongsFragment());
-        bottomNavigationView.setOnNavigationItemSelectedListener(
+        Log.d("TAG", "SongsFragment loaded");
+        bnv.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -46,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,9 +67,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame_container, fragment);
+        fragmentTransaction.replace(R.id.frame_container_main, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void respond(ListItemSongs song) {
+        NowPlayingActivity activity = new NowPlayingActivity();
+        NowPlayingFragment fragment =
+                (NowPlayingFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_now_playing);
+        Log.d("Fragment", String.valueOf(fragment));
+//        fragment.changeData(song);
+    }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    tools:context="fragments.bnv.NowPlayingFragment">
+    tools:context="fragments.NowPlayingFragment">
 
     <RelativeLayout
         android:id="@+id/app_bar"

@@ -1,12 +1,13 @@
-package fragments.songs;
+package fragments;
 
-
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,20 @@ public class SongsListFragment extends Fragment {
     RecyclerView recyclerView;
 
     List<ListItemSongs> list;
+    Communicator communicator;
     View view;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Communicator) {
+            Log.d("TAG", "Communicator linked");
+            communicator = (Communicator) context;
+        } else {
+            throw new RuntimeException(getContext().toString()
+                    + " must implement Communicator");
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -40,13 +54,12 @@ public class SongsListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         list = new ArrayList<>();
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                 LinearLayoutManager.VERTICAL, false));
         addData();
-        recyclerView.setAdapter(new SongsListAdapter(list));
-
+        recyclerView.setAdapter(new SongsListAdapter(list, communicator));
     }
 
     private void addData() {
@@ -105,5 +118,9 @@ public class SongsListFragment extends Fragment {
 
         item = new ListItemSongs(view.getContext(), R.raw.yellow);
         list.add(item);
+    }
+
+    public interface Communicator {
+        void respond(ListItemSongs song);
     }
 }

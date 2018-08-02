@@ -11,14 +11,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import fragments.SongsListFragment;
 import utils.ListItemSongs;
 
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.ViewHolder> {
 
     private List<ListItemSongs> list;
+    private SongsListFragment.Communicator communicator;
 
-    public SongsListAdapter(List<ListItemSongs> list) {
+    public SongsListAdapter(List<ListItemSongs> list, SongsListFragment.Communicator communicator) {
         this.list = list;
+        this.communicator = communicator;
     }
 
     @NonNull
@@ -26,7 +29,15 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_songs,
                 parent, false);
-        return new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ListItemSongs song = list.get(viewHolder.getAdapterPosition());
+                communicator.respond(song);
+            }
+        });
+        return viewHolder;
     }
 
     @Override
@@ -54,31 +65,16 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView artist;
         ImageButton more;
 
         ViewHolder(View itemView) {
             super(itemView);
-
             title = itemView.findViewById(R.id.song_name);
             artist = itemView.findViewById(R.id.song_artist);
             more = itemView.findViewById(R.id.song_more);
-            itemView.setOnClickListener(this);
-            more.setOnClickListener(this);
-        }
-
-        // todo: Implement click listener
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.song_more:
-                    break;
-                default:
-                    break;
-            }
-
         }
     }
 }
