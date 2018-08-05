@@ -1,4 +1,4 @@
-package com.example.deepamgoel.amplifire;
+package com.example.deepamgoel.amplifire.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,13 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.deepamgoel.amplifire.R;
+import com.example.deepamgoel.amplifire.fragments.BnvPlaylistFragment;
+import com.example.deepamgoel.amplifire.fragments.BnvSongsFragment;
+import com.example.deepamgoel.amplifire.fragments.SongsFragment;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fragments.PlaylistFragment;
-import fragments.SongsFragment;
-import fragments.SongsListFragment;
 
-public class MainActivity extends AppCompatActivity implements SongsListFragment.Communicator {
+public class MainActivity extends AppCompatActivity implements SongsFragment.Communicator {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements SongsListFragment
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        loadFragment(new SongsFragment());
+        loadFragment(new BnvSongsFragment());
         bnv.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -38,12 +40,12 @@ public class MainActivity extends AppCompatActivity implements SongsListFragment
                         Fragment fragment;
                         switch (item.getItemId()) {
                             case R.id.navigation_songs:
-                                fragment = new SongsFragment();
+                                fragment = new BnvSongsFragment();
                                 loadFragment(fragment);
                                 return true;
 
                             case R.id.navigation_playlist:
-                                fragment = new PlaylistFragment();
+                                fragment = new BnvPlaylistFragment();
                                 loadFragment(fragment);
                                 return true;
 

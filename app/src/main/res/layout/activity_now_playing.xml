@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NowPlayingActivity">
+    tools:context=".activities.NowPlayingActivity">
 
     <fragment
         android:id="@+id/fragment_now_playing"
+        android:name="com.example.deepamgoel.amplifire.fragments.NowPlayingFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="fragments.NowPlayingFragment" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

@@ -1,10 +1,11 @@
-package com.example.deepamgoel.amplifire;
+package com.example.deepamgoel.amplifire.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import fragments.NowPlayingFragment;
+import com.example.deepamgoel.amplifire.R;
+import com.example.deepamgoel.amplifire.fragments.NowPlayingFragment;
 
 public class NowPlayingActivity extends AppCompatActivity {
 

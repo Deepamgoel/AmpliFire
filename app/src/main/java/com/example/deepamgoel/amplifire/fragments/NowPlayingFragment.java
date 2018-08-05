@@ -1,4 +1,4 @@
-package fragments;
+package com.example.deepamgoel.amplifire.fragments;
 
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
@@ -48,8 +48,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     //Buttons
     @BindView(R.id.back)
     ImageButton back;
-    @BindView(R.id.song_info)
-    ImageButton song_info;
+    @BindView(R.id.more)
+    ImageButton more;
     @BindView(R.id.repeat)
     ImageButton repeat;
     @BindView(R.id.previous)
@@ -168,7 +168,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 break;
 
 //                Todo: Update info button
-            case R.id.song_info:
+            case R.id.more:
                 break;
 
 //                Todo: Update back button

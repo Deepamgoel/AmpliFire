@@ -1,4 +1,4 @@
-package utils;
+package com.example.deepamgoel.amplifire.models;
 
 import android.content.Context;
 

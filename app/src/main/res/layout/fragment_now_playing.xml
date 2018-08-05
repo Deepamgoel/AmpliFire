@@ -29,7 +29,7 @@
             android:tint="@color/AliceBlue" />
 
         <ImageButton
-            android:id="@+id/song_info"
+            android:id="@+id/more"
             android:layout_width="@dimen/thirty_six_dp"
             android:layout_height="@dimen/thirty_six_dp"
             android:layout_alignParentEnd="true"
@@ -40,7 +40,7 @@
             android:layout_marginRight="@dimen/eight_dp"
             android:background="@null"
             android:contentDescription="@string/back"
-            android:src="@drawable/information_outline"
+            android:src="@drawable/more"
             android:tint="@color/AliceBlue" />
 
     </RelativeLayout>
@@ -63,7 +63,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/thirty_six_dp"
         android:layout_marginStart="@dimen/thirty_six_dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="@dimen/ninety_six_dp"
         android:contentDescription="@string/album_art"
         android:scaleType="fitXY"
         tools:src="@drawable/ic_launcher_background" />
@@ -78,6 +78,7 @@
         android:layout_marginLeft="@dimen/thirty_six_dp"
         android:layout_marginStart="@dimen/thirty_six_dp"
         android:layout_marginTop="@dimen/sixteen_dp"
+        android:maxLines="1"
         android:textColor="@color/AliceBlue"
         android:textSize="@dimen/twenty_four_sp"
         tools:text="So Far Away" />
@@ -92,6 +93,7 @@
         android:layout_marginLeft="@dimen/thirty_six_dp"
         android:layout_marginStart="@dimen/thirty_six_dp"
         android:layout_marginTop="@dimen/eight_dp"
+        android:maxLines="1"
         android:textColor="@color/AliceBlue"
         android:textSize="@dimen/sixteen_sp"
         tools:text="So Far Away" />
@@ -158,8 +160,8 @@
             android:id="@+id/previous"
             android:layout_width="@dimen/forty_eight_dp"
             android:layout_height="@dimen/forty_eight_dp"
-            android:layout_marginLeft="@dimen/sixteen_dp"
-            android:layout_marginStart="@dimen/sixteen_dp"
+            android:layout_marginLeft="@dimen/eight_dp"
+            android:layout_marginStart="@dimen/eight_dp"
             android:background="@null"
             android:contentDescription="@string/previous"
             android:src="@drawable/skip_previous"
@@ -180,8 +182,8 @@
             android:id="@+id/next"
             android:layout_width="@dimen/forty_eight_dp"
             android:layout_height="@dimen/forty_eight_dp"
-            android:layout_marginEnd="@dimen/sixteen_dp"
-            android:layout_marginRight="@dimen/sixteen_dp"
+            android:layout_marginEnd="@dimen/eight_dp"
+            android:layout_marginRight="@dimen/eight_dp"
             android:background="@null"
             android:contentDescription="@string/next"
             android:src="@drawable/skip_next"

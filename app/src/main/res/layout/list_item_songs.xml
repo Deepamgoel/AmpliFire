@@ -18,6 +18,7 @@
             android:id="@+id/song_name"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_margin="@dimen/four_dp"
             android:layout_weight="1"
             android:maxLines="1"
             android:textColor="@color/AliceBlue"
@@ -28,6 +29,7 @@
             android:id="@+id/song_artist"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_margin="@dimen/four_dp"
             android:layout_marginTop="@dimen/four_dp"
             android:layout_weight="1"
             android:maxLines="1"
@@ -38,13 +40,15 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/song_play"
+        android:id="@+id/songs_like"
         android:layout_width="@dimen/twenty_four_dp"
         android:layout_height="@dimen/twenty_four_dp"
         android:layout_margin="@dimen/eight_dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
-        android:src="@drawable/play"
+        android:contentDescription="@string/like"
+        android:src="@drawable/heart_outline"
+        android:tag="off"
         android:tint="@color/AliceBlue" />
 
     <ImageButton
@@ -55,6 +59,7 @@
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:src="@drawable/more"
+        android:contentDescription="@string/more"
         android:tint="@color/AliceBlue" />
 
 

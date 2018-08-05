@@ -1,4 +1,4 @@
-package fragments;
+package com.example.deepamgoel.amplifire.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,16 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.deepamgoel.amplifire.R;
-import com.example.deepamgoel.amplifire.SongsListAdapter;
+import com.example.deepamgoel.amplifire.adapters.SongsListAdapter;
+import com.example.deepamgoel.amplifire.models.Media;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Media;
 
-public class SongsListFragment extends Fragment {
+public class SongsFragment extends Fragment {
 
     @BindView(R.id.recycler_view_songs_list)
     RecyclerView recyclerView;
@@ -44,7 +44,7 @@ public class SongsListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_songs_list, container, false);
+        view = inflater.inflate(R.layout.fragment_songs, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
