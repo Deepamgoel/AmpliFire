@@ -119,6 +119,6 @@ public class SongsFragment extends Fragment {
     }
 
     public interface Communicator {
-        void respond(int id);
+        void respond(Media media);
     }
 }

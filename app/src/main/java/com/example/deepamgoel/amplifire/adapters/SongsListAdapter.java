@@ -1,8 +1,6 @@
 package com.example.deepamgoel.amplifire.adapters;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaMetadataRetriever;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -41,7 +39,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
             @Override
             public void onClick(View v) {
                 Media media = list.get(viewHolder.getAdapterPosition());
-                communicator.respond(media.getId());
+                communicator.respond(media);
             }
         });
         return viewHolder;
@@ -50,24 +48,8 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Media media = list.get(position);
-
-        AssetFileDescriptor afd = context.getResources().openRawResourceFd(media.getId());
-        MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-
-        String title = metadataRetriever.extractMetadata(
-                MediaMetadataRetriever.METADATA_KEY_TITLE);
-        String artist = metadataRetriever.extractMetadata(
-                MediaMetadataRetriever.METADATA_KEY_ARTIST);
-
-        if (title != null)
-            holder.title.setText(title);
-        else holder.title.setText(R.string.unknown_title);
-
-        if (artist != null)
-            holder.artist.setText(artist);
-        else holder.artist.setText(R.string.unknown_artist);
-
+        holder.title.setText(media.getMediaTitle());
+        holder.artist.setText(media.getMediaArtist());
     }
 
     @Override

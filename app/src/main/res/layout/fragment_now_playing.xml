@@ -30,8 +30,8 @@
 
         <ImageButton
             android:id="@+id/more"
-            android:layout_width="@dimen/thirty_six_dp"
-            android:layout_height="@dimen/thirty_six_dp"
+            android:layout_width="@dimen/twenty_four_dp"
+            android:layout_height="@dimen/twenty_four_dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

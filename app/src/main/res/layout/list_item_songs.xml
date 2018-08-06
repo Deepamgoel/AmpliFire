@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/four_dp"
     android:gravity="center"
     android:orientation="horizontal"
     tools:background="@color/DarkTeal">
@@ -45,8 +46,8 @@
         android:layout_height="@dimen/twenty_four_dp"
         android:layout_margin="@dimen/eight_dp"
         android:background="@android:color/transparent"
-        android:scaleType="fitXY"
         android:contentDescription="@string/like"
+        android:scaleType="fitXY"
         android:src="@drawable/heart_outline"
         android:tag="off"
         android:tint="@color/AliceBlue" />
@@ -57,10 +58,9 @@
         android:layout_height="@dimen/twenty_four_dp"
         android:layout_margin="@dimen/sixteen_dp"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/more"
         android:scaleType="fitXY"
         android:src="@drawable/more"
-        android:contentDescription="@string/more"
         android:tint="@color/AliceBlue" />
-
 
 </LinearLayout>

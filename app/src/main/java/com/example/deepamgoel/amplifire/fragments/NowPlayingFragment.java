@@ -1,9 +1,5 @@
 package com.example.deepamgoel.amplifire.fragments;
 
-import android.content.res.AssetFileDescriptor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,13 +15,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.deepamgoel.amplifire.R;
+import com.example.deepamgoel.amplifire.models.Media;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NowPlayingFragment extends Fragment implements View.OnClickListener {
+public class NowPlayingFragment extends Fragment implements View.OnClickListener, MediaPlayer.OnCompletionListener {
 
 
     // Media attributes
@@ -41,7 +38,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     @BindView(R.id.played_duration)
     TextView playedDuration;
     @BindView(R.id.total_duration)
-    TextView totalDuration;
+    TextView duration;
     @BindView(R.id.seekbar)
     SeekBar seekBar;
 
@@ -61,22 +58,22 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     @BindView(R.id.like)
     ImageButton like;
 
-    private MediaMetadataRetriever metadataRetriever;
     private MediaPlayer mediaPlayer;
-    private AssetFileDescriptor afd;
-    private View view;
+    private Media media;
 
     private Handler handler = new Handler();
-    private Runnable UpdateSongTime = new Runnable() {
+    private Runnable updateSongTime = new Runnable() {
 
         public void run() {
-            int time = mediaPlayer.getCurrentPosition();
-            playedDuration.setText(getString(R.string.duration,
-                    TimeUnit.MILLISECONDS.toMinutes(time),
-                    (TimeUnit.MILLISECONDS.toSeconds(time) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
-            seekBar.setProgress(mediaPlayer.getCurrentPosition());
-            handler.postDelayed(this, 100);
+            if (mediaPlayer.isPlaying()) {
+                int time = mediaPlayer.getCurrentPosition();
+                playedDuration.setText(getString(R.string.duration,
+                        TimeUnit.MILLISECONDS.toMinutes(time),
+                        (TimeUnit.MILLISECONDS.toSeconds(time) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
+                seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                handler.postDelayed(this, 100);
+            }
         }
 
     };
@@ -84,7 +81,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_now_playing, container, false);
+        View view = inflater.inflate(R.layout.fragment_now_playing, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -93,13 +90,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mediaPlayer = MediaPlayer.create(getContext(), R.raw.animals);
-        metadataRetriever = new MediaMetadataRetriever();
+//        HandlerThread mHandlerThread;
+//        mHandlerThread = new HandlerThread("HandlerThread");
+//        mHandlerThread.start();
+//        handler = new Handler(mHandlerThread.getLooper());
 
-        afd = view.getResources().openRawResourceFd(R.raw.animals);
-        metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-
-        setData();
         play.setOnClickListener(this);
         next.setOnClickListener(this);
         previous.setOnClickListener(this);
@@ -121,12 +116,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-//        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                pause();
-//            }
-//        });
+
     }
 
     @Override
@@ -134,10 +124,10 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.play:
-                if (play.getTag().equals("pause")) {
-                    play();
-                } else if (play.getTag().equals("play")) {
+                if (mediaPlayer.isPlaying()) {
                     pause();
+                } else {
+                    play();
                 }
                 break;
 
@@ -167,64 +157,22 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 }
                 break;
 
-//                Todo: Update info button
             case R.id.more:
                 break;
 
-//                Todo: Update back button
             case R.id.back:
                 break;
         }
     }
 
-    private void setData() {
-
-        try {
-            byte[] art = metadataRetriever.getEmbeddedPicture();
-            Bitmap image = BitmapFactory.decodeByteArray(art, 0, art.length);
-            background.setImageBitmap(image);
-            albumArt.setImageBitmap(image);
-        } catch (Exception e) {
-            background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
-            albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
-        }
-
-        try {
-            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-            if (string != null)
-                title.setText(string);
-            else title.setText(R.string.unknown_title);
-        } catch (Exception e) {
-            title.setText(R.string.unknown_title);
-        }
-
-        try {
-            String string = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            if (string != null)
-                artist.setText(string);
-            else artist.setText(R.string.unknown_artist);
-        } catch (Exception e) {
-            artist.setText(R.string.unknown_artist);
-        }
-
-        try {
-            int time = mediaPlayer.getDuration();
-            totalDuration.setText(getString(R.string.duration,
-                    TimeUnit.MILLISECONDS.toMinutes(time),
-                    (TimeUnit.MILLISECONDS.toSeconds(time) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
-        } catch (Exception e) {
-            totalDuration.setText(getString(R.string.duration, 0, 0));
-        }
-
-        try {
-            int time = mediaPlayer.getCurrentPosition();
-            playedDuration.setText(getString(R.string.duration,
-                    TimeUnit.MILLISECONDS.toMinutes(time),
-                    (TimeUnit.MILLISECONDS.toSeconds(time) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
-        } catch (Exception e) {
-            totalDuration.setText(getString(R.string.duration, 0, 0));
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        if (repeat.getTag().equals("one")) {
+            mediaPlayer.seekTo(0);
+            play();
+        } else {
+            play.setTag("pause");
+            play.setImageDrawable(getResources().getDrawable(R.drawable.play_circle_outline));
         }
     }
 
@@ -233,9 +181,9 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         play.setImageDrawable(getResources().getDrawable(R.drawable.pause_circle_outline));
 
         mediaPlayer.start();
-        seekBar.setMax(mediaPlayer.getDuration());
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
-        handler.postDelayed(UpdateSongTime, 100);
+        handler.postDelayed(updateSongTime, 100);
+        mediaPlayer.setOnCompletionListener(this);
     }
 
     private void pause() {
@@ -283,11 +231,43 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     }
 
     public void changeData(int id) {
-        mediaPlayer = MediaPlayer.create(getContext(), id);
-        afd = view.getResources().openRawResourceFd(id);
-        metadataRetriever = new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-        setData();
+        media = new Media(getContext(), id);
+        setData(media);
+        play();
+    }
+
+    private void setData(@NonNull Media media) {
+
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying())
+                mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        mediaPlayer = media.getMediaPlayer();
+
+        if (media.getMediaBitmap() != null) {
+            albumArt.setImageBitmap(media.getMediaBitmap());
+            background.setImageBitmap(media.getMediaBitmap());
+        } else {
+            albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
+            background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
+        }
+        title.setText(media.getMediaTitle());
+        artist.setText(media.getMediaArtist());
+        duration.setText(media.getMediaDuration());
+        seekBar.setMax(mediaPlayer.getDuration());
+        seekBar.setProgress(0);
+
+        try {
+            int time = mediaPlayer.getCurrentPosition();
+            playedDuration.setText(getString(R.string.duration,
+                    TimeUnit.MILLISECONDS.toMinutes(time),
+                    (TimeUnit.MILLISECONDS.toSeconds(time) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
+        } catch (Exception e) {
+            playedDuration.setText(getString(R.string.duration, 0, 0));
+        }
     }
 }
 

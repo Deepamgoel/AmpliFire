@@ -15,6 +15,7 @@ import com.example.deepamgoel.amplifire.R;
 import com.example.deepamgoel.amplifire.fragments.BnvPlaylistFragment;
 import com.example.deepamgoel.amplifire.fragments.BnvSongsFragment;
 import com.example.deepamgoel.amplifire.fragments.SongsFragment;
+import com.example.deepamgoel.amplifire.models.Media;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,9 +72,10 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Com
     }
 
     @Override
-    public void respond(int id) {
+    public void respond(Media media) {
+
         Intent intent = new Intent(this, NowPlayingActivity.class);
-        intent.putExtra("id", id);
+        intent.putExtra("id", media.getId());
         startActivity(intent);
     }
 }

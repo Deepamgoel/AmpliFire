@@ -19,8 +19,7 @@ public class NowPlayingActivity extends AppCompatActivity {
                         findFragmentById(R.id.fragment_now_playing);
 
         Intent intent = getIntent();
-        if (fragment != null) {
-            fragment.changeData(intent.getIntExtra("id", R.raw.animals));
-        }
+        int id = intent.getIntExtra("id", R.raw.animals);
+        fragment.changeData(id);
     }
 }
