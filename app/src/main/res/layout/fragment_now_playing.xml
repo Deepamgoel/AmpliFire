@@ -197,7 +197,7 @@
             android:background="@null"
             android:contentDescription="@string/shuffle"
             android:src="@drawable/heart_outline"
-            android:tag="off"
+            android:tag="dislike"
             android:tint="@color/AliceBlue" />
 
     </LinearLayout>

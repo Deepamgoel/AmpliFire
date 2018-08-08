@@ -49,7 +49,7 @@
         android:contentDescription="@string/like"
         android:scaleType="fitXY"
         android:src="@drawable/heart_outline"
-        android:tag="off"
+        android:tag="dislike"
         android:tint="@color/AliceBlue" />
 
     <ImageButton

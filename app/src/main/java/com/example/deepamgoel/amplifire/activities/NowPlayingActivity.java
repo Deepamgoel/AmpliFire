@@ -13,6 +13,17 @@ public class NowPlayingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
+//        if (savedInstanceState != null) {
+//            nowPlayingFragment = (NowPlayingFragment) getSupportFragmentManager().
+//                    getFragment(savedInstanceState, "nowPlayingFragment");
+//        } else {
+//        }
+
+//        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        nowPlayingFragment = new NowPlayingFragment();
+//        fragmentTransaction.replace(R.id.fragment_now_playing_container,
+//                nowPlayingFragment, "now_playing_fragment");
+//        fragmentTransaction.commit();
 
         NowPlayingFragment fragment =
                 (NowPlayingFragment) getSupportFragmentManager().
@@ -22,4 +33,15 @@ public class NowPlayingActivity extends AppCompatActivity {
         int id = intent.getIntExtra("id", R.raw.animals);
         fragment.changeData(id);
     }
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        Log.d("TAG", "onSaveInstanceState: NowPlayingActivity");
+//
+//        getSupportFragmentManager().putFragment(
+//                outState,
+//                "nowPlayingFragment",
+//                getSupportFragmentManager().findFragmentByTag("now_playing_fragment"));
+//    }
 }

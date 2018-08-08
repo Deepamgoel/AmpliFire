@@ -22,8 +22,9 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NowPlayingFragment extends Fragment implements View.OnClickListener, MediaPlayer.OnCompletionListener {
-
+public class NowPlayingFragment extends Fragment implements
+        View.OnClickListener,
+        MediaPlayer.OnCompletionListener {
 
     // Media attributes
     @BindView(R.id.background)
@@ -78,6 +79,14 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     };
 
+//    public static NowPlayingFragment newInstance() {
+//        NowPlayingFragment myFragment = new NowPlayingFragment();
+//        Bundle args = new Bundle();
+//        args.putInt("someInt", someInt);
+//        myFragment.setArguments(args);
+//        return myFragment;
+//    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,13 +96,35 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+
+            media = savedInstanceState.getParcelable("media");
+
+            if (media != null) {
+                if (media.isLike()) {
+                    dislike();
+                } else if (!media.isLike()) {
+                    like();
+                }
+                setData(media);
+            }
+
+            repeat.setTag(savedInstanceState.getString("repeat"));
+            if (repeat.getTag().equals("off")) {
+                repeatOn();
+            } else if (repeat.getTag().equals("on")) {
+                repeatOnce();
+            } else if (repeat.getTag().equals("one")) {
+                repeatOff();
+            }
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        HandlerThread mHandlerThread;
-//        mHandlerThread = new HandlerThread("HandlerThread");
-//        mHandlerThread.start();
-//        handler = new Handler(mHandlerThread.getLooper());
 
         play.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -140,9 +171,9 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.like:
-                if (like.getTag().equals("off")) {
+                if (like.getTag().equals("dislike")) {
                     like();
-                } else if (like.getTag().equals("on")) {
+                } else if (like.getTag().equals("like")) {
                     dislike();
                 }
                 break;
@@ -176,6 +207,13 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         }
     }
 
+//    @Override
+//    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putString("repeat", repeat.getTag().toString());
+//        outState.putParcelable("media", media);
+//    }
+
     private void play() {
         play.setTag("play");
         play.setImageDrawable(getResources().getDrawable(R.drawable.pause_circle_outline));
@@ -201,15 +239,17 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     }
 
     private void like() {
-        like.setTag("on");
+        like.setTag("like");
         like.setImageDrawable(getResources().getDrawable(R.drawable.heart));
         like.setColorFilter(getResources().getColor(R.color.Teal));
+        media.setLike(true);
     }
 
     private void dislike() {
-        like.setTag("off");
+        like.setTag("dislike");
         like.setImageDrawable(getResources().getDrawable(R.drawable.heart_outline));
         like.setColorFilter(getResources().getColor(R.color.AliceBlue));
+        media.setLike(false);
     }
 
     private void repeatOn() {
@@ -233,7 +273,6 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     public void changeData(int id) {
         media = new Media(getContext(), id);
         setData(media);
-        play();
     }
 
     private void setData(@NonNull Media media) {
@@ -253,11 +292,16 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
             background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
         }
+
         title.setText(media.getMediaTitle());
         artist.setText(media.getMediaArtist());
         duration.setText(media.getMediaDuration());
         seekBar.setMax(mediaPlayer.getDuration());
         seekBar.setProgress(0);
+        if (media.isLike())
+            like();
+        else if (!media.isLike())
+            dislike();
 
         try {
             int time = mediaPlayer.getCurrentPosition();

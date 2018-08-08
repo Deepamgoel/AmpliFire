@@ -6,41 +6,45 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.widget.Toast;
 
 import com.example.deepamgoel.amplifire.R;
 
 import java.util.concurrent.TimeUnit;
 
-public class Media {
+public class Media implements Parcelable {
 
-    //    public static final Parcelable.Creator<Media> CREATOR
-//            = new Parcelable.Creator<Media>() {
-//        public Media createFromParcel(Parcel in) {
-//            return new Media(in);
-//        }
-//
-//        @Override
-//        public Media[] newArray(int size) {
-//            return new Media[size];
-//        }
-//    };
+    public static final Parcelable.Creator<Media> CREATOR
+            = new Parcelable.Creator<Media>() {
+        public Media createFromParcel(Parcel in) {
+            return new Media(in);
+        }
+
+        @Override
+        public Media[] newArray(int size) {
+            return new Media[size];
+        }
+    };
     private Context context;
     private int id;
     private MediaMetadataRetriever metadataRetriever;
     private MediaPlayer mediaPlayer;
-    private Bitmap image;
-    private String title;
-    private String artist;
-    private String album;
-    private String duration;
+    private boolean like;
 
     public Media(Context context, int id) {
         this.context = context;
         this.id = id;
+        setLike(false);
         mediaPlayer = MediaPlayer.create(context, id);
         AssetFileDescriptor afd = context.getResources().openRawResourceFd(id);
         metadataRetriever = new MediaMetadataRetriever();
         metadataRetriever.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+    }
+
+    private Media(Parcel in) {
+        /*like = in.readByte() != 0;*/
     }
 
     public int getId() {
@@ -51,33 +55,31 @@ public class Media {
         return mediaPlayer;
     }
 
-
     public Bitmap getMediaBitmap() {
         try {
             byte[] art = metadataRetriever.getEmbeddedPicture();
-            image = BitmapFactory.decodeByteArray(art, 0, art.length);
-            return image;
+            return BitmapFactory.decodeByteArray(art, 0, art.length);
         } catch (Exception e) {
             return null;
         }
     }
 
     public String getMediaTitle() {
-        title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        String title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
         if (title != null)
             return title;
         return context.getString(R.string.unknown_title);
     }
 
     public String getMediaArtist() {
-        artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        String artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
         if (artist != null)
             return artist;
         return context.getString(R.string.unknown_artist);
     }
 
     public String getMediaAlbum() {
-        album = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        String album = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
         if (album != null)
             return album;
         return context.getString(R.string.unknown_album);
@@ -86,14 +88,36 @@ public class Media {
     public String getMediaDuration() {
         try {
             int time = mediaPlayer.getDuration();
-            duration = (context.getString(R.string.duration,
+            return (context.getString(R.string.duration,
                     TimeUnit.MILLISECONDS.toMinutes(time),
                     (TimeUnit.MILLISECONDS.toSeconds(time) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))));
-            return duration;
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))
+            ));
         } catch (Exception e) {
             return context.getString(R.string.duration, 0, 0);
         }
     }
 
+    public boolean isLike() {
+        return like;
+    }
+
+    public void setLike(boolean like) {
+        this.like = like;
+        if (like)
+            Toast.makeText(context, "Added to favorite", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(context, "Removed from favorite", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        /*dest.writeByte((byte) (like ? 1 : 0));*/
+    }
 }

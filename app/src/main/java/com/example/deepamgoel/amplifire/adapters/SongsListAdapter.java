@@ -22,6 +22,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
     private Context context;
     private List<Media> list;
     private SongsFragment.Communicator communicator;
+    private Media media;
 
     public SongsListAdapter(Context context, List<Media> list, SongsFragment.Communicator communicator) {
         this.context = context;
@@ -47,9 +48,20 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Media media = list.get(position);
+        media = list.get(position);
         holder.title.setText(media.getMediaTitle());
         holder.artist.setText(media.getMediaArtist());
+        if (!media.isLike()) {
+            holder.like.setTag("dislike");
+            holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart_outline));
+            holder.like.setColorFilter(context.getResources().getColor(R.color.AliceBlue));
+            media.setLike(false);
+        } else if (media.isLike()) {
+            holder.like.setTag("like");
+            holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart));
+            holder.like.setColorFilter(context.getResources().getColor(R.color.Teal));
+            media.setLike(true);
+        }
     }
 
     @Override
@@ -79,14 +91,16 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
             switch (v.getId()) {
 
                 case R.id.songs_like:
-                    if (like.getTag().equals("off")) {
-                        like.setTag("on");
+                    if (like.getTag().equals("dislike")) {
+                        like.setTag("like");
                         like.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart));
                         like.setColorFilter(ContextCompat.getColor(context, R.color.Teal));
-                    } else if (like.getTag().equals("on")) {
-                        like.setTag("off");
+                        media.setLike(true);
+                    } else if (like.getTag().equals("like")) {
+                        like.setTag("dislike");
                         like.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart_outline));
                         like.setColorFilter(ContextCompat.getColor(context, R.color.AliceBlue));
+                        media.setLike(false);
                     }
                     break;
 
@@ -95,4 +109,5 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
             }
         }
     }
+
 }
