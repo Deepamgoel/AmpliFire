@@ -1,5 +1,7 @@
 package com.example.deepamgoel.amplifire.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -103,9 +105,9 @@ public class NowPlayingFragment extends Fragment implements
             media = savedInstanceState.getParcelable("media");
 
             if (media != null) {
-                if (media.isLike()) {
+                if (media.getLike()) {
                     dislike();
-                } else if (!media.isLike()) {
+                } else if (!media.getLike()) {
                     like();
                 }
                 setData(media);
@@ -270,8 +272,8 @@ public class NowPlayingFragment extends Fragment implements
         repeat.setColorFilter(getResources().getColor(R.color.Teal));
     }
 
-    public void changeData(int id) {
-        media = new Media(getContext(), id);
+    public void changeData(Media media) {
+        this.media = media;
         setData(media);
     }
 
@@ -283,11 +285,13 @@ public class NowPlayingFragment extends Fragment implements
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        mediaPlayer = media.getMediaPlayer();
+        mediaPlayer = MediaPlayer.create(getContext(), media.getId());
 
-        if (media.getMediaBitmap() != null) {
-            albumArt.setImageBitmap(media.getMediaBitmap());
-            background.setImageBitmap(media.getMediaBitmap());
+        if (media.getMediaArt() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(
+                    media.getMediaArt(), 0, media.getMediaArt().length);
+            albumArt.setImageBitmap(bitmap);
+            background.setImageBitmap(bitmap);
         } else {
             albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
             background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
@@ -298,9 +302,9 @@ public class NowPlayingFragment extends Fragment implements
         duration.setText(media.getMediaDuration());
         seekBar.setMax(mediaPlayer.getDuration());
         seekBar.setProgress(0);
-        if (media.isLike())
+        if (media.getLike())
             like();
-        else if (!media.isLike())
+        else if (!media.getLike())
             dislike();
 
         try {

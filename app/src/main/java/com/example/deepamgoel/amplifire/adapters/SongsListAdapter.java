@@ -2,7 +2,6 @@ package com.example.deepamgoel.amplifire.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +15,11 @@ import com.example.deepamgoel.amplifire.models.Media;
 
 import java.util.List;
 
-
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.ViewHolder> {
 
     private Context context;
     private List<Media> list;
     private SongsFragment.Communicator communicator;
-    private Media media;
 
     public SongsListAdapter(Context context, List<Media> list, SongsFragment.Communicator communicator) {
         this.context = context;
@@ -47,26 +44,44 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        media = list.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        final Media media = list.get(position);
         holder.title.setText(media.getMediaTitle());
         holder.artist.setText(media.getMediaArtist());
-        if (!media.isLike()) {
-            holder.like.setTag("dislike");
-            holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart_outline));
-            holder.like.setColorFilter(context.getResources().getColor(R.color.AliceBlue));
-            media.setLike(false);
-        } else if (media.isLike()) {
-            holder.like.setTag("like");
-            holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart));
-            holder.like.setColorFilter(context.getResources().getColor(R.color.Teal));
-            media.setLike(true);
-        }
+        if (!media.getLike())
+            dislike(holder, media);
+        else if (media.getLike())
+            like(holder, media);
+
+        holder.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.like.getTag().equals("like"))
+                    dislike(holder, media);
+                else if (holder.like.getTag().equals("dislike"))
+                    like(holder, media);
+
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    private void like(ViewHolder holder, Media media) {
+        holder.like.setTag("like");
+        holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart));
+        holder.like.setColorFilter(context.getResources().getColor(R.color.Teal));
+        media.setLike(true);
+    }
+
+    private void dislike(ViewHolder holder, Media media) {
+        holder.like.setTag("dislike");
+        holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart_outline));
+        holder.like.setColorFilter(context.getResources().getColor(R.color.AliceBlue));
+        media.setLike(false);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -81,7 +96,6 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
             artist = itemView.findViewById(R.id.song_artist);
             like = itemView.findViewById(R.id.songs_like);
             more = itemView.findViewById(R.id.song_more);
-            like.setOnClickListener(this);
             more.setOnClickListener(this);
         }
 
@@ -90,24 +104,9 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
 
             switch (v.getId()) {
 
-                case R.id.songs_like:
-                    if (like.getTag().equals("dislike")) {
-                        like.setTag("like");
-                        like.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart));
-                        like.setColorFilter(ContextCompat.getColor(context, R.color.Teal));
-                        media.setLike(true);
-                    } else if (like.getTag().equals("like")) {
-                        like.setTag("dislike");
-                        like.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart_outline));
-                        like.setColorFilter(ContextCompat.getColor(context, R.color.AliceBlue));
-                        media.setLike(false);
-                    }
-                    break;
-
                 case R.id.song_more:
                     break;
             }
         }
     }
-
 }

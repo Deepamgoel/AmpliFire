@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Com
     public void respond(Media media) {
 
         Intent intent = new Intent(this, NowPlayingActivity.class);
-        intent.putExtra("id", media.getId());
+        intent.putExtra("media", media);
         startActivity(intent);
     }
 }
