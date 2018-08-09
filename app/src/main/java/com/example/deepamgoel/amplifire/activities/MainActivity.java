@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.deepamgoel.amplifire.R;
+import com.example.deepamgoel.amplifire.fragments.AlbumFragment;
 import com.example.deepamgoel.amplifire.fragments.ArtistFragment;
 import com.example.deepamgoel.amplifire.fragments.BnvPlaylistFragment;
 import com.example.deepamgoel.amplifire.fragments.BnvSongsFragment;
@@ -23,7 +24,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements
         SongsFragment.CallbackSongs,
-        ArtistFragment.CallbackArtist {
+        ArtistFragment.CallbackArtist,
+        AlbumFragment.CallbackAlbum {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -83,6 +85,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void respondArtist(Song song) {
+
+    }
+
+    @Override
+    public void respondAlbum(Song song) {
 
     }
 }

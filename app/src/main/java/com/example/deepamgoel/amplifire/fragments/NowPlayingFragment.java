@@ -209,13 +209,6 @@ public class NowPlayingFragment extends Fragment implements
         }
     }
 
-//    @Override
-//    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putString("repeat", repeat.getTag().toString());
-//        outState.putParcelable("song", song);
-//    }
-
     private void play() {
         play.setTag("play");
         play.setImageDrawable(getResources().getDrawable(R.drawable.pause_circle_outline));
@@ -318,4 +311,3 @@ public class NowPlayingFragment extends Fragment implements
         }
     }
 }
-

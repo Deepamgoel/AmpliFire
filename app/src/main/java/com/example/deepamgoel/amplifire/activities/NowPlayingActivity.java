@@ -3,7 +3,6 @@ package com.example.deepamgoel.amplifire.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.deepamgoel.amplifire.R;
 import com.example.deepamgoel.amplifire.fragments.NowPlayingFragment;
@@ -17,9 +16,6 @@ public class NowPlayingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
-        if (savedInstanceState != null)
-            Log.d("TAG", "SaveInstanceState: " + String.valueOf(savedInstanceState));
-
 
         NowPlayingFragment fragment =
                 (NowPlayingFragment) getSupportFragmentManager().
@@ -41,6 +37,5 @@ public class NowPlayingActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("song", song);
-        Log.d("TAG", "onSaveInstanceState: ");
     }
 }
