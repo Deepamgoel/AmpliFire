@@ -7,11 +7,11 @@ import android.util.Log;
 
 import com.example.deepamgoel.amplifire.R;
 import com.example.deepamgoel.amplifire.fragments.NowPlayingFragment;
-import com.example.deepamgoel.amplifire.models.Media;
+import com.example.deepamgoel.amplifire.models.Song;
 
 public class NowPlayingActivity extends AppCompatActivity {
 
-    private Media media;
+    private Song song;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,20 +27,20 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (savedInstanceState != null)
-            media = savedInstanceState.getParcelable("media");
+            song = savedInstanceState.getParcelable("song");
         else
-            media = intent.getParcelableExtra("media");
+            song = intent.getParcelableExtra("song");
 
-        if (media != null)
-            fragment.changeData(media);
+        if (song != null)
+            fragment.changeData(song);
         else
-            fragment.changeData(new Media(getApplicationContext(), R.raw.starboy));
+            fragment.changeData(new Song(getApplicationContext(), R.raw.starboy));
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("media", media);
+        outState.putParcelable("song", song);
         Log.d("TAG", "onSaveInstanceState: ");
     }
 }

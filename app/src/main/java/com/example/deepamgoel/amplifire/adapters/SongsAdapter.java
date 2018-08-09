@@ -11,20 +11,20 @@ import android.widget.TextView;
 
 import com.example.deepamgoel.amplifire.R;
 import com.example.deepamgoel.amplifire.fragments.SongsFragment;
-import com.example.deepamgoel.amplifire.models.Media;
+import com.example.deepamgoel.amplifire.models.Song;
 
 import java.util.List;
 
-public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.ViewHolder> {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
 
     private Context context;
-    private List<Media> list;
-    private SongsFragment.Communicator communicator;
+    private List<Song> list;
+    private SongsFragment.CallbackSongs callbackSongs;
 
-    public SongsListAdapter(Context context, List<Media> list, SongsFragment.Communicator communicator) {
+    public SongsAdapter(Context context, List<Song> list, SongsFragment.CallbackSongs callbackSongs) {
         this.context = context;
         this.list = list;
-        this.communicator = communicator;
+        this.callbackSongs = callbackSongs;
     }
 
     @NonNull
@@ -36,8 +36,8 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Media media = list.get(viewHolder.getAdapterPosition());
-                communicator.respond(media);
+                Song song = list.get(viewHolder.getAdapterPosition());
+                callbackSongs.respondSongs(song);
             }
         });
         return viewHolder;
@@ -45,21 +45,28 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final Media media = list.get(position);
-        holder.title.setText(media.getMediaTitle());
-        holder.artist.setText(media.getMediaArtist());
-        if (!media.getLike())
-            dislike(holder, media);
-        else if (media.getLike())
-            like(holder, media);
+        final Song song = list.get(position);
+        holder.title.setText(song.getTitle());
+        holder.artist.setText(song.getArtist());
+        if (!song.getLike())
+            dislike(holder, song);
+        else if (song.getLike())
+            like(holder, song);
 
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.like.getTag().equals("like"))
-                    dislike(holder, media);
+                    dislike(holder, song);
                 else if (holder.like.getTag().equals("dislike"))
-                    like(holder, media);
+                    like(holder, song);
+
+            }
+        });
+
+        holder.more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
@@ -70,21 +77,21 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
         return list.size();
     }
 
-    private void like(ViewHolder holder, Media media) {
+    private void like(ViewHolder holder, Song song) {
         holder.like.setTag("like");
         holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart));
         holder.like.setColorFilter(context.getResources().getColor(R.color.Teal));
-        media.setLike(true);
+        song.setLike(true);
     }
 
-    private void dislike(ViewHolder holder, Media media) {
+    private void dislike(ViewHolder holder, Song song) {
         holder.like.setTag("dislike");
         holder.like.setImageDrawable(context.getResources().getDrawable(R.drawable.heart_outline));
         holder.like.setColorFilter(context.getResources().getColor(R.color.AliceBlue));
-        media.setLike(false);
+        song.setLike(false);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView artist;
         ImageButton like;
@@ -96,17 +103,6 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
             artist = itemView.findViewById(R.id.song_artist);
             like = itemView.findViewById(R.id.songs_like);
             more = itemView.findViewById(R.id.song_more);
-            more.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            switch (v.getId()) {
-
-                case R.id.song_more:
-                    break;
-            }
         }
     }
 }

@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.deepamgoel.amplifire.R;
-import com.example.deepamgoel.amplifire.adapters.SongsListAdapter;
-import com.example.deepamgoel.amplifire.models.Media;
+import com.example.deepamgoel.amplifire.adapters.SongsAdapter;
+import com.example.deepamgoel.amplifire.models.Song;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +23,21 @@ import butterknife.ButterKnife;
 
 public class SongsFragment extends Fragment {
 
-    @BindView(R.id.recycler_view_songs_list)
+    @BindView(R.id.recycler_view_songs)
     RecyclerView recyclerView;
 
-    List<Media> list;
-    Communicator communicator;
+    List<Song> list;
+    CallbackSongs callbackSongs;
     View view;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Communicator) {
-            communicator = (Communicator) context;
+        if (context instanceof CallbackSongs) {
+            callbackSongs = (CallbackSongs) context;
         } else {
             throw new RuntimeException(getContext().toString()
-                    + " must implement Communicator");
+                    + " must implement CallbackSongs");
         }
     }
 
@@ -57,68 +57,68 @@ public class SongsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                 LinearLayoutManager.VERTICAL, false));
         addData();
-        recyclerView.setAdapter(new SongsListAdapter(view.getContext(), list, communicator));
+        recyclerView.setAdapter(new SongsAdapter(view.getContext(), list, callbackSongs));
     }
 
     private void addData() {
-        Media item;
+        Song item;
 
-        item = new Media(view.getContext(), R.raw.animals);
+        item = new Song(view.getContext(), R.raw.animals);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.better);
+        item = new Song(view.getContext(), R.raw.better);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.burn);
+        item = new Song(view.getContext(), R.raw.burn);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.cant_stop_the_feeling);
+        item = new Song(view.getContext(), R.raw.cant_stop_the_feeling);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.champagne_problems);
+        item = new Song(view.getContext(), R.raw.champagne_problems);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.dna);
+        item = new Song(view.getContext(), R.raw.dna);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.forgiveness);
+        item = new Song(view.getContext(), R.raw.forgiveness);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.heartless);
+        item = new Song(view.getContext(), R.raw.heartless);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.human);
+        item = new Song(view.getContext(), R.raw.human);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.hymn_for_the_weekend);
+        item = new Song(view.getContext(), R.raw.hymn_for_the_weekend);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.im_not_theonly_one);
+        item = new Song(view.getContext(), R.raw.im_not_theonly_one);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.love_yourself);
+        item = new Song(view.getContext(), R.raw.love_yourself);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.move_your_body);
+        item = new Song(view.getContext(), R.raw.move_your_body);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.party_hard_chris_brown);
+        item = new Song(view.getContext(), R.raw.party_hard_chris_brown);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.starboy);
+        item = new Song(view.getContext(), R.raw.starboy);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.when_the_bassline_drops);
+        item = new Song(view.getContext(), R.raw.when_the_bassline_drops);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.years_seven);
+        item = new Song(view.getContext(), R.raw.years_seven);
         list.add(item);
 
-        item = new Media(view.getContext(), R.raw.yellow);
+        item = new Song(view.getContext(), R.raw.yellow);
         list.add(item);
     }
 
-    public interface Communicator {
-        void respond(Media media);
+    public interface CallbackSongs {
+        void respondSongs(Song song);
     }
 }

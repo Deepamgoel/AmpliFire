@@ -5,7 +5,7 @@
     tools:context="com.example.deepamgoel.amplifire.fragments.SongsFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_songs_list"
+        android:id="@+id/recycler_view_songs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

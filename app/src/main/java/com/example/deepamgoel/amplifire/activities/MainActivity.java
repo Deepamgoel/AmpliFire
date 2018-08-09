@@ -12,15 +12,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.deepamgoel.amplifire.R;
+import com.example.deepamgoel.amplifire.fragments.ArtistFragment;
 import com.example.deepamgoel.amplifire.fragments.BnvPlaylistFragment;
 import com.example.deepamgoel.amplifire.fragments.BnvSongsFragment;
 import com.example.deepamgoel.amplifire.fragments.SongsFragment;
-import com.example.deepamgoel.amplifire.models.Media;
+import com.example.deepamgoel.amplifire.models.Song;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements SongsFragment.Communicator {
+public class MainActivity extends AppCompatActivity implements
+        SongsFragment.CallbackSongs,
+        ArtistFragment.CallbackArtist {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -72,10 +75,14 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Com
     }
 
     @Override
-    public void respond(Media media) {
-
+    public void respondSongs(Song song) {
         Intent intent = new Intent(this, NowPlayingActivity.class);
-        intent.putExtra("media", media);
+        intent.putExtra("song", song);
         startActivity(intent);
+    }
+
+    @Override
+    public void respondArtist(Song song) {
+
     }
 }

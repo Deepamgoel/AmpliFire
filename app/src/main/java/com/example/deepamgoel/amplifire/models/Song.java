@@ -10,17 +10,17 @@ import com.example.deepamgoel.amplifire.R;
 
 import java.util.concurrent.TimeUnit;
 
-public class Media implements Parcelable {
+public class Song implements Parcelable {
 
-    public static final Parcelable.Creator<Media> CREATOR
-            = new Parcelable.Creator<Media>() {
-        public Media createFromParcel(Parcel in) {
-            return new Media(in);
+    public static final Parcelable.Creator<Song> CREATOR
+            = new Parcelable.Creator<Song>() {
+        public Song createFromParcel(Parcel in) {
+            return new Song(in);
         }
 
         @Override
-        public Media[] newArray(int size) {
-            return new Media[size];
+        public Song[] newArray(int size) {
+            return new Song[size];
         }
     };
     private Context context;
@@ -33,7 +33,7 @@ public class Media implements Parcelable {
     private boolean like;
     private String duration;
 
-    public Media(Context context, int id) {
+    public Song(Context context, int id) {
         this.context = context;
         this.id = id;
         metadataRetriever = new MediaMetadataRetriever();
@@ -42,7 +42,7 @@ public class Media implements Parcelable {
         assigner();
     }
 
-    private Media(Parcel in) {
+    private Song(Parcel in) {
         id = in.readInt();
         art = in.createByteArray();
         title = in.readString();
@@ -61,34 +61,34 @@ public class Media implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeByteArray(art);
-        dest.writeString(getMediaTitle());
-        dest.writeString(getMediaArtist());
-        dest.writeString(getMediaAlbum());
+        dest.writeString(getTitle());
+        dest.writeString(getArtist());
+        dest.writeString(getAlbum());
         dest.writeByte((byte) (like ? 1 : 0));
-        dest.writeString(getMediaDuration());
+        dest.writeString(getDuration());
     }
 
     public int getId() {
         return id;
     }
 
-    public byte[] getMediaArt() {
+    public byte[] getArt() {
         return art;
     }
 
-    public String getMediaTitle() {
+    public String getTitle() {
         if (title != null)
             return title;
         return context.getString(R.string.unknown_title);
     }
 
-    public String getMediaArtist() {
+    public String getArtist() {
         if (artist != null)
             return artist;
         return context.getString(R.string.unknown_artist);
     }
 
-    public String getMediaAlbum() {
+    public String getAlbum() {
         if (album != null)
             return album;
         return context.getString(R.string.unknown_album);
@@ -102,7 +102,7 @@ public class Media implements Parcelable {
         this.like = like;
     }
 
-    public String getMediaDuration() {
+    public String getDuration() {
         return duration;
     }
 

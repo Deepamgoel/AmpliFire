@@ -17,7 +17,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.deepamgoel.amplifire.R;
-import com.example.deepamgoel.amplifire.models.Media;
+import com.example.deepamgoel.amplifire.models.Song;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +28,7 @@ public class NowPlayingFragment extends Fragment implements
         View.OnClickListener,
         MediaPlayer.OnCompletionListener {
 
-    // Media attributes
+    // Song attributes
     @BindView(R.id.background)
     ImageView background;
     @BindView(R.id.album_art)
@@ -62,7 +62,7 @@ public class NowPlayingFragment extends Fragment implements
     ImageButton like;
 
     private MediaPlayer mediaPlayer;
-    private Media media;
+    private Song song;
 
     private Handler handler = new Handler();
     private Runnable updateSongTime = new Runnable() {
@@ -102,15 +102,15 @@ public class NowPlayingFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
 
-            media = savedInstanceState.getParcelable("media");
+            song = savedInstanceState.getParcelable("song");
 
-            if (media != null) {
-                if (media.getLike()) {
+            if (song != null) {
+                if (song.getLike()) {
                     dislike();
-                } else if (!media.getLike()) {
+                } else if (!song.getLike()) {
                     like();
                 }
-                setData(media);
+                setData(song);
             }
 
             repeat.setTag(savedInstanceState.getString("repeat"));
@@ -213,7 +213,7 @@ public class NowPlayingFragment extends Fragment implements
 //    public void onSaveInstanceState(@NonNull Bundle outState) {
 //        super.onSaveInstanceState(outState);
 //        outState.putString("repeat", repeat.getTag().toString());
-//        outState.putParcelable("media", media);
+//        outState.putParcelable("song", song);
 //    }
 
     private void play() {
@@ -244,14 +244,14 @@ public class NowPlayingFragment extends Fragment implements
         like.setTag("like");
         like.setImageDrawable(getResources().getDrawable(R.drawable.heart));
         like.setColorFilter(getResources().getColor(R.color.Teal));
-        media.setLike(true);
+        song.setLike(true);
     }
 
     private void dislike() {
         like.setTag("dislike");
         like.setImageDrawable(getResources().getDrawable(R.drawable.heart_outline));
         like.setColorFilter(getResources().getColor(R.color.AliceBlue));
-        media.setLike(false);
+        song.setLike(false);
     }
 
     private void repeatOn() {
@@ -272,12 +272,12 @@ public class NowPlayingFragment extends Fragment implements
         repeat.setColorFilter(getResources().getColor(R.color.Teal));
     }
 
-    public void changeData(Media media) {
-        this.media = media;
-        setData(media);
+    public void changeData(Song song) {
+        this.song = song;
+        setData(song);
     }
 
-    private void setData(@NonNull Media media) {
+    private void setData(@NonNull Song song) {
 
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying())
@@ -285,26 +285,26 @@ public class NowPlayingFragment extends Fragment implements
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        mediaPlayer = MediaPlayer.create(getContext(), media.getId());
+        mediaPlayer = MediaPlayer.create(getContext(), song.getId());
 
-        if (media.getMediaArt() != null) {
+        if (song.getArt() != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(
-                    media.getMediaArt(), 0, media.getMediaArt().length);
+                    song.getArt(), 0, song.getArt().length);
             albumArt.setImageBitmap(bitmap);
             background.setImageBitmap(bitmap);
         } else {
-            albumArt.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
-            background.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
+            albumArt.setImageDrawable(getResources().getDrawable(R.drawable.default_art));
+            background.setImageDrawable(getResources().getDrawable(R.drawable.default_art));
         }
 
-        title.setText(media.getMediaTitle());
-        artist.setText(media.getMediaArtist());
-        duration.setText(media.getMediaDuration());
+        title.setText(song.getTitle());
+        artist.setText(song.getArtist());
+        duration.setText(song.getDuration());
         seekBar.setMax(mediaPlayer.getDuration());
         seekBar.setProgress(0);
-        if (media.getLike())
+        if (song.getLike())
             like();
-        else if (!media.getLike())
+        else if (!song.getLike())
             dislike();
 
         try {

@@ -52,7 +52,7 @@
         android:alpha="0.1"
         android:contentDescription="@string/background"
         android:scaleType="centerCrop"
-        tools:src="@drawable/ic_launcher_background" />
+        tools:src="@drawable/default_art" />
 
     <ImageView
         android:id="@+id/album_art"
@@ -66,7 +66,7 @@
         android:layout_marginTop="@dimen/ninety_six_dp"
         android:contentDescription="@string/album_art"
         android:scaleType="fitXY"
-        tools:src="@drawable/ic_launcher_background" />
+        tools:src="@drawable/default_art" />
 
     <TextView
         android:id="@+id/album_title"
