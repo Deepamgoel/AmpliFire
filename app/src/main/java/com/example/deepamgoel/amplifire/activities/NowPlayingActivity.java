@@ -10,8 +10,6 @@ import com.example.deepamgoel.amplifire.models.Song;
 
 public class NowPlayingActivity extends AppCompatActivity {
 
-    private Song song;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,21 +19,14 @@ public class NowPlayingActivity extends AppCompatActivity {
                 (NowPlayingFragment) getSupportFragmentManager().
                         findFragmentById(R.id.fragment_now_playing);
 
+        Song song;
         Intent intent = getIntent();
-        if (savedInstanceState != null)
-            song = savedInstanceState.getParcelable("song");
-        else
+        if (intent.hasExtra("song"))
             song = intent.getParcelableExtra("song");
+        else
+            song = new Song(getApplicationContext(), R.raw.heartless);
 
         if (song != null)
             fragment.changeData(song);
-        else
-            fragment.changeData(new Song(getApplicationContext(), R.raw.starboy));
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("song", song);
     }
 }

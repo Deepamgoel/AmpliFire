@@ -2,6 +2,7 @@ package com.example.deepamgoel.amplifire.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,10 +57,17 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.like.getTag().equals("like"))
+                if (holder.like.getTag().equals("like")) {
+                    Snackbar snackbar = Snackbar.make(v.getRootView(),
+                            song.getTitle() + " removed from favorite", Snackbar.LENGTH_SHORT);
+                    snackbar.setAction("Action", null).show();
                     dislike(holder, song);
-                else if (holder.like.getTag().equals("dislike"))
+                } else if (holder.like.getTag().equals("dislike")) {
+                    Snackbar snackbar = Snackbar.make(v.getRootView(),
+                            song.getTitle() + " added to favorite", Snackbar.LENGTH_SHORT);
+                    snackbar.setAction("Action", null).show();
                     like(holder, song);
+                }
 
             }
         });

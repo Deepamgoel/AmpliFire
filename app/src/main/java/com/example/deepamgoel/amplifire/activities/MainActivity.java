@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
+        fab.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.play_circle_outline));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

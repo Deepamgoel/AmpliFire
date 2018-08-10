@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,14 +81,6 @@ public class NowPlayingFragment extends Fragment implements
         }
 
     };
-
-//    public static NowPlayingFragment newInstance() {
-//        NowPlayingFragment myFragment = new NowPlayingFragment();
-//        Bundle args = new Bundle();
-//        args.putInt("someInt", someInt);
-//        myFragment.setArguments(args);
-//        return myFragment;
-//    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -174,8 +167,14 @@ public class NowPlayingFragment extends Fragment implements
 
             case R.id.like:
                 if (like.getTag().equals("dislike")) {
+                    Snackbar snackbar = Snackbar.make(getView(),
+                            song.getTitle() + " added to favorite", Snackbar.LENGTH_SHORT);
+                    snackbar.setAction("Action", null).show();
                     like();
                 } else if (like.getTag().equals("like")) {
+                    Snackbar snackbar = Snackbar.make(getView(),
+                            song.getTitle() + " removed from favorite", Snackbar.LENGTH_SHORT);
+                    snackbar.setAction("Action", null).show();
                     dislike();
                 }
                 break;
@@ -191,6 +190,7 @@ public class NowPlayingFragment extends Fragment implements
                 break;
 
             case R.id.more:
+                more();
                 break;
 
             case R.id.back:
@@ -207,6 +207,18 @@ public class NowPlayingFragment extends Fragment implements
             play.setTag("pause");
             play.setImageDrawable(getResources().getDrawable(R.drawable.play_circle_outline));
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(updateSongTime);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handler.postDelayed(updateSongTime, 100);
     }
 
     private void play() {
@@ -263,6 +275,10 @@ public class NowPlayingFragment extends Fragment implements
         repeat.setTag("one");
         repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat_once));
         repeat.setColorFilter(getResources().getColor(R.color.Teal));
+    }
+
+    private void more() {
+
     }
 
     public void changeData(Song song) {
