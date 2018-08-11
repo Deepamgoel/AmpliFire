@@ -20,6 +20,9 @@ import com.example.deepamgoel.amplifire.fragments.BnvSongsFragment;
 import com.example.deepamgoel.amplifire.fragments.SongsFragment;
 import com.example.deepamgoel.amplifire.models.Song;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -32,6 +35,43 @@ public class MainActivity extends AppCompatActivity implements
     FloatingActionButton fab;
     @BindView(R.id.bnv)
     BottomNavigationView bnv;
+
+    public static List<Song> addData(View view) {
+        List<Song> list = new ArrayList<>();
+        Song item;
+
+        item = new Song(view.getContext(), R.raw.starboy);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.animals);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.forgiveness);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.better);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.burn);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.heartless);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.human);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.party_hard_chris_brown);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.when_the_bassline_drops);
+        list.add(item);
+
+        item = new Song(view.getContext(), R.raw.champagne_problems);
+        list.add(item);
+
+        return list;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,4 +134,5 @@ public class MainActivity extends AppCompatActivity implements
     public void respondAlbum(Song song) {
 
     }
+
 }
