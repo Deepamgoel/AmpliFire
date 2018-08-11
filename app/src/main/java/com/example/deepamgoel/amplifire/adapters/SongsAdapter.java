@@ -3,8 +3,11 @@ package com.example.deepamgoel.amplifire.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -68,14 +71,17 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
                     snackbar.setAction("Action", null).show();
                     like(holder, song);
                 }
-
             }
         });
 
         holder.more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Context wrapper = new ContextThemeWrapper(v.getContext(), R.style.PopUpTheme);
+                PopupMenu popupMenu = new PopupMenu(wrapper, holder.more);
+                MenuInflater menuInflater = popupMenu.getMenuInflater();
+                menuInflater.inflate(R.menu.now_playing_menu, popupMenu.getMenu());
+                popupMenu.show();
             }
         });
     }

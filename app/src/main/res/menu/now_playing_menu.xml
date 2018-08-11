@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add_to_playlist"
+        android:icon="@drawable/playlist_play"
+        android:title="@string/add_to_playlist" />
+
+    <item
+        android:id="@+id/song_info"
+        android:icon="@drawable/information_outline"
+        android:iconTint="@color/AliceBlue"
+        android:title="@string/song_info" />
+
+</menu>

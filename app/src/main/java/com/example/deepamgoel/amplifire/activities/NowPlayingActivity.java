@@ -1,5 +1,6 @@
 package com.example.deepamgoel.amplifire.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,11 +62,12 @@ public class NowPlayingActivity extends AppCompatActivity implements
     ImageButton next;
     @BindView(R.id.like)
     ImageButton like;
+
     private Song song;
+    private PopupMenu popupMenu;
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
     private Runnable updateSongTime = new Runnable() {
-
         public void run() {
             if (mediaPlayer.isPlaying()) {
                 int time = mediaPlayer.getCurrentPosition();
@@ -74,7 +79,6 @@ public class NowPlayingActivity extends AppCompatActivity implements
                 handler.postDelayed(this, 100);
             }
         }
-
     };
 
     @Override
@@ -89,6 +93,11 @@ public class NowPlayingActivity extends AppCompatActivity implements
             song = intent.getParcelableExtra("song");
         else
             song = new Song(getApplicationContext(), R.raw.starboy);
+
+        Context wrapper = new ContextThemeWrapper(this, R.style.PopUpTheme);
+        popupMenu = new PopupMenu(wrapper, more);
+        MenuInflater menuInflater = popupMenu.getMenuInflater();
+        menuInflater.inflate(R.menu.now_playing_menu, popupMenu.getMenu());
 
         play.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -164,7 +173,7 @@ public class NowPlayingActivity extends AppCompatActivity implements
                 break;
 
             case R.id.more:
-                more();
+                popupMenu.show();
                 break;
 
             case R.id.back:
@@ -246,10 +255,6 @@ public class NowPlayingActivity extends AppCompatActivity implements
         repeat.setTag("one");
         repeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat_once));
         repeat.setColorFilter(getResources().getColor(R.color.Teal));
-    }
-
-    private void more() {
-
     }
 
     private void setData(@NonNull Song song) {
